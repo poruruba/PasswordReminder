@@ -177,7 +177,7 @@ var vue_options = {
             this.insert_url = "";
             this.insert_userid = "";
             this.insert_password = "";
-            this.dialog_open("#insert_dialog");
+            this.dialog_open("#insert_dialog", "true");
         },
         show_update_dialog: async function(index){
             try{
@@ -186,13 +186,13 @@ var vue_options = {
                 };
                 var json = await do_post_apikey(base_url + '/pwd-get', param, this.apikey);
                 var item = json.result;
-            this.update_uuid = item.uuid;
-            this.update_name = item.name;
-            this.update_url = item.url;
-            this.update_userid = item.userid;
-            this.insert_password = item.password;
-            this.update_description = item.description;
-            this.dialog_open("#update_dialog");
+                this.update_uuid = item.uuid;
+                this.update_name = item.name;
+                this.update_url = item.url;
+                this.update_userid = item.userid;
+                this.insert_password = item.password;
+                this.update_description = item.description;
+                this.dialog_open("#update_dialog", "true");
             }catch(error){
                 console.error(error);
                 alert(error);
@@ -205,7 +205,7 @@ var vue_options = {
             };
                 var json = await do_post_apikey(base_url + '/pwd-get', param, this.apikey);
                 this.get = json.result;
-                this.dialog_open("#get_dialog");
+                this.dialog_open("#get_dialog", "true");
             }catch(error){
                 console.error(error);
                 alert(error);
