@@ -288,7 +288,7 @@ void loop()
     if( ret == 0 ){
       // パスワードリストを取得
       ret = do_post_with_apikey(endpoint, NULL, &json_response, apikey);
-      if( ret >= 0 ){
+      if( ret == 0 ){
         Serial.println("do_post OK");
         // 不揮発メモリにパスワードリストを保存
         ret = save_password(&json_response);
