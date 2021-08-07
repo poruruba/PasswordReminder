@@ -17,7 +17,7 @@
 
 const char *wifi_ssid = "【WiFiアクセスポイントのSSID】"; // WiFiアクセスポイントのSSID
 const char *wifi_password = "【WiFiアクセスポイントのパスワード】"; // WiFiアクセスポイントのパスワード
-const char *apikey = "【パスワードサーバのAPIKey】";
+const char *apikey = "【サーバのAPIKey】";
 const char *endpoint = "【サーバのURL】/pwd-allpasswd";
 
 #define LCD_BRIGHTNESS  64  // LCDのバックライトの輝度(0～255)
