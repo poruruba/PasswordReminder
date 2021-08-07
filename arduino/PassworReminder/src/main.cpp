@@ -229,6 +229,9 @@ void setup()
   print_screen();
 }
 
+/*
+ * Arduinoループ処理
+ */
 void loop()
 {
   M5.update();
@@ -272,19 +275,22 @@ void loop()
     }
   }
 
-  if( M5.Axp.GetBtnPress() != 0 ){
+  // 電源ボタンが押されたとき
+  if( M5.Axp.GetBtnPress() == 2 ){
     lcd.fillScreen(BLACK);
     lcd.setCursor(0, 0);
     lcd.println("更新中");
-    delay(5000);
 
     bool completed = false;
     long ret;
+    // WiFiアクセスポイントに接続
     ret = wifi_connect(wifi_ssid, wifi_password, WIFI_TIMEOUT);
     if( ret == 0 ){
+      // パスワードリストを取得
       ret = do_post_with_apikey(endpoint, NULL, &json_response, apikey);
       if( ret >= 0 ){
         Serial.println("do_post OK");
+        // 不揮発メモリにパスワードリストを保存
         ret = save_password(&json_response);
         if( ret == 0 ){
           Serial.println("save_password OK");
@@ -310,6 +316,7 @@ void loop()
   delay(1);
 }
 
+// WiFiアクセスポイントに接続
 long wifi_connect(const char *ssid, const char *password, unsigned long timeout)
 {
   #define CHECK_INTERVAL  1000
@@ -334,6 +341,7 @@ long wifi_connect(const char *ssid, const char *password, unsigned long timeout)
   return 0;
 }
 
+// 不揮発メモリからパスワードリストを取得
 long reload_password(JsonDocument *p_output){
   pref.begin(pref_name, true);
   size_t len = pref.getString(pref_key, json_buffer, sizeof(json_buffer));
@@ -350,6 +358,7 @@ long reload_password(JsonDocument *p_output){
   return 0;
 }
 
+// 不揮発メモリにパスワードリストを保存
 long save_password(JsonDocument *p_output){
   size_t len = serializeJson(*p_output, json_buffer, sizeof(json_buffer));
   if (len < 0 || len >= sizeof(json_buffer)){
@@ -393,6 +402,7 @@ const char *get_password(unsigned short index){
   return list[index]["password"];
 }
 
+// パスワードの数を取得
 short get_num(void){
   JsonArray list = json_response["result"];
   return (short)list.size();
@@ -413,6 +423,7 @@ void print_screen(void)
   }
 }
 
+// APIKey付きでHTTP POST(Json)呼び出し
 long do_post_with_apikey(const char *p_endpoint, JsonDocument *p_input, JsonDocument *p_output, const char *apikey)
 {
   HTTPClient http;
