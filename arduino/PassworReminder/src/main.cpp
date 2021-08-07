@@ -275,9 +275,10 @@ void loop()
   if( M5.Axp.GetBtnPress() != 0 ){
     lcd.fillScreen(BLACK);
     lcd.setCursor(0, 0);
-    lcd.println("更新中\n");
+    lcd.println("更新中");
     delay(5000);
 
+    bool completed = false;
     long ret;
     ret = wifi_connect(wifi_ssid, wifi_password, WIFI_TIMEOUT);
     if( ret == 0 ){
@@ -287,6 +288,7 @@ void loop()
         ret = save_password(&json_response);
         if( ret == 0 ){
           Serial.println("save_password OK");
+          completed = true;
           if (get_title(0) != NULL)
             current_index = 0;
           else
@@ -295,7 +297,12 @@ void loop()
       }
       WiFi.disconnect(true);
     }
-
+    if( completed )
+      lcd.println("更新成功");
+    else
+      lcd.println("更新失敗");
+    delay(1000);
+    
     // LCD表示の更新
     print_screen();
   }
